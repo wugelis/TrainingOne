@@ -1,0 +1,62 @@
+:root{
+  --dk:#0B3D2E; --dk2:#14573F; --mint:#EAF6F0; --g:#1FBF7A; --or:#F5A524; --pale:#7ADBB0; --wh:#fff;
+  --font:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#06241b;font-family:var(--font);overflow:hidden}
+.deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+/* 固定 1280x720 舞台，依視窗等比縮放（由 script.js 設定 --s） */
+.stage{width:1280px;height:720px;position:relative;flex:none;transform:scale(var(--s,1));transform-origin:center center;overflow:hidden;background:var(--dk);box-shadow:0 10px 40px rgba(0,0,0,.45)}
+.slide{position:absolute;inset:0;padding:72px 80px;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s}
+.slide.active{opacity:1;visibility:visible}
+.slide.dark{background:var(--dk);color:var(--wh)}
+.slide.light{background:var(--mint);color:var(--dk)}
+h1{font-size:76px;line-height:1.2;font-weight:700}
+h2{font-size:48px;line-height:1.25;font-weight:700;height:80px}
+.badge{display:inline-flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:50%;background:var(--g);color:var(--wh);flex:none}
+.badge svg{width:42px;height:42px;fill:currentColor}
+.badge.alt{background:var(--or)}
+.badge.sm{width:60px;height:60px}.badge.sm svg{width:28px;height:28px}
+/* 封面 */
+.title-slide .title-text{position:absolute;left:80px;top:190px;width:640px}
+.sub{font-size:30px;color:var(--pale);margin-top:28px}
+.tag{font-size:24px;color:var(--or);font-style:italic;margin-top:96px}
+.deco{position:absolute;border-radius:50%}
+.c1{width:500px;height:500px;background:var(--dk2);right:-30px;top:60px}
+.c2{width:140px;height:140px;background:var(--g);opacity:.3;right:60px;bottom:50px}
+.speaker{position:absolute;right:30px;top:60px;width:500px;text-align:center}
+.speaker img{width:332px;height:332px;border-radius:50%;margin-top:84px;display:block;margin-left:auto;margin-right:auto}
+.speaker figcaption{margin-top:30px;display:flex;flex-direction:column;gap:6px}
+.speaker strong{font-size:28px}.speaker span{font-size:20px;color:var(--pale)}
+/* 卡片 */
+.cards{display:grid;gap:30px;margin-top:40px}
+.cards.three{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--wh);border-radius:18px;padding:30px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;gap:22px}
+.card.tall{height:380px}
+.card h3{font-size:38px}
+.card p{font-size:23px;line-height:1.55;color:var(--dk2)}
+/* 重點清單 */
+.points{list-style:none;margin-top:24px;display:flex;flex-direction:column;gap:12px}
+.points li{display:flex;align-items:center;gap:26px;background:var(--wh);border-radius:14px;padding:12px 24px;font-size:27px;box-shadow:0 3px 10px rgba(0,0,0,.08);min-height:78px}
+.points .badge.sm{width:52px;height:52px}.points .badge.sm svg{width:24px;height:24px}
+/* 課程形式 */
+.format{margin-top:40px;background:var(--dk);color:var(--wh);border-radius:18px;padding:30px 36px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.format dt{font-size:20px;color:var(--pale);font-weight:700;margin-bottom:10px}
+.format dd{font-size:24px}
+/* 聯絡 */
+.contact-wrap{display:flex;justify-content:space-between;align-items:center;margin-top:30px}
+.contacts{list-style:none;display:flex;flex-direction:column;gap:38px}
+.contacts li{display:flex;align-items:center;gap:30px}
+.contacts small{display:block;font-size:20px;color:var(--pale);margin-bottom:4px}
+.contacts strong,.contacts a{font-size:34px;font-weight:700;color:var(--wh)}
+.qr{text-align:center}
+.qr img{width:260px;height:260px;background:var(--wh);padding:14px;border-radius:14px;display:block}
+.qr figcaption{margin-top:18px;font-size:20px;color:var(--pale)}
+/* 導覽 */
+.nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:14px;background:rgba(0,0,0,.45);padding:6px 14px;border-radius:30px;z-index:5}
+.nav button{background:none;border:0;color:#fff;font-size:26px;line-height:1;cursor:pointer;padding:0 6px}
+.nav button:disabled{opacity:.3;cursor:default}
+.dots{display:flex;gap:8px}
+.dots button{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.4);padding:0;font-size:0}
+.dots button.on{background:var(--g)}
+@media (prefers-reduced-motion:reduce){.slide{transition:none}}
