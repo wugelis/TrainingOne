@@ -1,0 +1,78 @@
+name: Deploy src to GitHub Pages
+
+on:
+  # 只有簡報內容或本 workflow 變動時才觸發
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - ".github/workflows/pages.yml"
+  # PR 只做檢查，不發佈
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/**"
+      - ".github/workflows/pages.yml"
+  # 可在 Actions 頁面手動執行
+  workflow_dispatch:
+
+# 預設最小權限；部署所需權限只開給 deploy job
+permissions:
+  contents: read
+
+# 同一時間只保留一個部署；新的推送會取消尚未完成的舊部署
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: 檢查 (必要檔案 / 本機連結)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 檢查必要檔案
+        run: |
+          for f in src/index.html src/style.css src/script.js src/assets/photo.png src/assets/qr.png; do
+            test -f "$f" || { echo "::error file=$f::找不到必要檔案 $f"; exit 1; }
+          done
+
+      - name: 提醒尚未填寫的占位文字
+        run: |
+          if grep -nE '\[(例：|請填入|實體 / 線上)' src/index.html; then
+            echo "::warning file=src/index.html::第 4 張「課程形式」仍有未填寫的占位文字"
+          fi
+
+      - name: 檢查 HTML 內的本機連結 (離線，不檢查外部網址)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --no-progress "src/**/*.html"
+          fail: true
+
+  deploy:
+    name: 部署到 GitHub Pages
+    # PR 不部署，只有 main 的 push 或手動執行才部署
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      - name: 上傳 src 作為 Pages 內容
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: src
+
+      - name: 部署
+        id: deployment
+        uses: actions/deploy-pages@v4
