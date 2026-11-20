@@ -1,0 +1,12 @@
+/* GitHub Copilot 課程頁：藍色主題（覆寫 style.css 的綠色變數） */
+:root{
+  --dk:#1B2F8F; --dk2:#2B55C0; --mint:#E8F0FC; --g:#1FA8E8; --or:#F5A524; --pale:#8FD3FF; --wh:#fff;
+}
+html,body{background:#0C1650}
+.stage{background:var(--dk)}
+.slide.dark{background:linear-gradient(135deg,#2D5CC4 0%,#1B2F8F 55%,#141A6E 100%);color:var(--wh)}
+.slide.light{background:var(--mint);color:#142A7A}
+.card p{color:#2B55C0}
+.c1{background:rgba(255,255,255,.1)}
+.c2{background:var(--g);opacity:.4}
+.format{background:linear-gradient(135deg,#2D5CC4,#1B2F8F)}
